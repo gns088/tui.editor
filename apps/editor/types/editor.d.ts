@@ -2,12 +2,12 @@ import { Schema, NodeSpec, MarkSpec, Fragment } from 'prosemirror-model';
 import { EditorView, Decoration, DecorationSet } from 'prosemirror-view';
 import { EditorState, Plugin, Selection, TextSelection } from 'prosemirror-state';
 import {
-    HTMLConvertor,
-    MdPos,
-    Sourcepos,
-    Context as MdContext,
-    HTMLToken,
-    HTMLConvertorMap,
+  HTMLConvertor,
+  MdPos,
+  Sourcepos,
+  Context as MdContext,
+  HTMLToken,
+  HTMLConvertorMap,
 } from './toastmark';
 import { Emitter, Handler } from './event';
 import { Context, EditorAllCommandMap, EditorCommandFn, SpecManager } from './spec';
@@ -21,36 +21,36 @@ export type EditorType = 'markdown' | 'wysiwyg';
 export type WidgetStyle = 'top' | 'bottom';
 
 export interface WidgetRule {
-    rule: RegExp;
-    toDOM: (text: string) => HTMLElement;
+  rule: RegExp;
+  toDOM: (text: string) => HTMLElement;
 }
 
 export type WidgetRuleMap = Record<string, WidgetRule>;
 
 export interface EventMap {
-    load?: (param: Editor) => void;
-    change?: (editorType: EditorType) => void;
-    caretChange?: (editorType: EditorType) => void;
-    focus?: (editorType: EditorType) => void;
-    blur?: (editorType: EditorType) => void;
-    keydown?: (editorType: EditorType, ev: KeyboardEvent) => void;
-    keyup?: (editorType: EditorType, ev: KeyboardEvent) => void;
-    beforePreviewRender?: (html: string) => string;
-    beforeConvertWysiwygToMarkdown?: (markdownText: string) => string;
+  load?: (param: Editor) => void;
+  change?: (editorType: EditorType) => void;
+  caretChange?: (editorType: EditorType) => void;
+  focus?: (editorType: EditorType) => void;
+  blur?: (editorType: EditorType) => void;
+  keydown?: (editorType: EditorType, ev: KeyboardEvent) => void;
+  keyup?: (editorType: EditorType, ev: KeyboardEvent) => void;
+  beforePreviewRender?: (html: string) => string;
+  beforeConvertWysiwygToMarkdown?: (markdownText: string) => string;
 }
 
 type HookCallback = (url: string, text?: string) => void;
 
 export type HookMap = {
-    addImageBlobHook?: (blob: Blob | File, callback: HookCallback) => void;
+  addImageBlobHook?: (blob: Blob | File, callback: HookCallback) => void;
 };
 
 export type AutolinkParser = (
-    content: string,
+  content: string
 ) => {
-    url: string;
-    text: string;
-    range: [number, number];
+  url: string;
+  text: string;
+  range: [number, number];
 }[];
 
 export type ExtendedAutolinks = boolean | AutolinkParser;
@@ -63,9 +63,9 @@ export type LinkAttributes = Partial<Record<LinkAttributeNames, string>>;
 export type Sanitizer = (content: string) => string;
 
 export type HTMLMdNodeConvertor = (
-    node: HTMLMdNode,
-    context: MdContext,
-    convertors?: HTMLConvertorMap,
+  node: HTMLMdNode,
+  context: MdContext,
+  convertors?: HTMLConvertorMap
 ) => HTMLToken | HTMLToken[] | null;
 
 export type HTMLMdNodeConvertorMap = Record<string, HTMLMdNodeConvertor>;
@@ -73,285 +73,285 @@ export type HTMLMdNodeConvertorMap = Record<string, HTMLMdNodeConvertor>;
 export type CustomHTMLRenderer = Partial<Record<string, HTMLConvertor | HTMLMdNodeConvertorMap>>;
 
 export interface ViewerOptions {
-    el: HTMLElement;
-    initialValue?: string;
-    events?: EventMap;
-    plugins?: EditorPlugin[];
-    extendedAutolinks?: ExtendedAutolinks;
-    linkAttributes?: LinkAttributes;
-    customHTMLRenderer?: CustomHTMLRenderer;
-    referenceDefinition?: boolean;
-    customHTMLSanitizer?: Sanitizer;
-    frontMatter?: boolean;
-    usageStatistics?: boolean;
-    theme?: string;
+  el: HTMLElement;
+  initialValue?: string;
+  events?: EventMap;
+  plugins?: EditorPlugin[];
+  extendedAutolinks?: ExtendedAutolinks;
+  linkAttributes?: LinkAttributes;
+  customHTMLRenderer?: CustomHTMLRenderer;
+  referenceDefinition?: boolean;
+  customHTMLSanitizer?: Sanitizer;
+  frontMatter?: boolean;
+  usageStatistics?: boolean;
+  theme?: string;
 }
 
 export class Viewer {
-    static isViewer: boolean;
+  static isViewer: boolean;
 
-    constructor(options: ViewerOptions);
+  constructor(options: ViewerOptions);
 
-    setMarkdown(markdown: string): void;
+  setMarkdown(markdown: string): void;
 
-    on(type: string, handler: Handler): void;
+  on(type: string, handler: Handler): void;
 
-    off(type: string): void;
+  off(type: string): void;
 
-    destroy(): void;
+  destroy(): void;
 
-    isViewer(): boolean;
+  isViewer(): boolean;
 
-    isMarkdownMode(): boolean;
+  isMarkdownMode(): boolean;
 
-    isWysiwygMode(): boolean;
+  isWysiwygMode(): boolean;
 
-    addHook(type: string, handler: Handler): void;
+  addHook(type: string, handler: Handler): void;
 }
 
 export interface I18n {
-    setCode(code?: string): void;
+  setCode(code?: string): void;
 
-    setLanguage(codes: string | string[], data: Record<string, string>): void;
+  setLanguage(codes: string | string[], data: Record<string, string>): void;
 
-    get(key: string, code?: string): string;
+  get(key: string, code?: string): string;
 }
 
 export interface PluginContext {
-    eventEmitter: Emitter;
-    usageStatistics?: boolean;
-    i18n: I18n;
-    pmState: {
-        Plugin: typeof Plugin;
-        Selection: typeof Selection;
-        TextSelection: typeof TextSelection;
-    };
-    pmView: { Decoration: typeof Decoration; DecorationSet: typeof DecorationSet };
-    pmModel: { Fragment: typeof Fragment };
+  eventEmitter: Emitter;
+  usageStatistics?: boolean;
+  i18n: I18n;
+  pmState: {
+    Plugin: typeof Plugin;
+    Selection: typeof Selection;
+    TextSelection: typeof TextSelection;
+  };
+  pmView: { Decoration: typeof Decoration; DecorationSet: typeof DecorationSet };
+  pmModel: { Fragment: typeof Fragment };
 }
 
 export type PluginFn = (context: PluginContext, options?: any) => PluginInfo | null;
 export type EditorPlugin = PluginFn | [PluginFn, any];
 
 export interface EditorOptions {
-    el: HTMLElement;
-    height?: string;
-    minHeight?: string;
-    initialValue?: string;
-    previewStyle?: PreviewStyle;
-    initialEditType?: EditorType;
-    events?: EventMap;
-    hooks?: HookMap;
-    language?: string;
-    useCommandShortcut?: boolean;
-    usageStatistics?: boolean;
-    toolbarItems?: (string | ToolbarItemOptions)[][];
-    hideModeSwitch?: boolean;
-    plugins?: EditorPlugin[];
-    extendedAutolinks?: ExtendedAutolinks;
-    placeholder?: string;
-    linkAttributes?: LinkAttributes;
-    customHTMLRenderer?: CustomHTMLRenderer;
-    customMarkdownRenderer?: ToMdConvertorMap;
-    referenceDefinition?: boolean;
-    customHTMLSanitizer?: Sanitizer;
-    previewHighlight?: boolean;
-    frontMatter?: boolean;
-    widgetRules?: WidgetRule[];
-    theme?: string;
-    autofocus?: boolean;
-    viewer?: boolean;
+  el: HTMLElement;
+  height?: string;
+  minHeight?: string;
+  initialValue?: string;
+  previewStyle?: PreviewStyle;
+  initialEditType?: EditorType;
+  events?: EventMap;
+  hooks?: HookMap;
+  language?: string;
+  useCommandShortcut?: boolean;
+  usageStatistics?: boolean;
+  toolbarItems?: (string | ToolbarItemOptions)[][];
+  hideModeSwitch?: boolean;
+  plugins?: EditorPlugin[];
+  extendedAutolinks?: ExtendedAutolinks;
+  placeholder?: string;
+  linkAttributes?: LinkAttributes;
+  customHTMLRenderer?: CustomHTMLRenderer;
+  customMarkdownRenderer?: ToMdConvertorMap;
+  referenceDefinition?: boolean;
+  customHTMLSanitizer?: Sanitizer;
+  previewHighlight?: boolean;
+  frontMatter?: boolean;
+  widgetRules?: WidgetRule[];
+  theme?: string;
+  autofocus?: boolean;
+  viewer?: boolean;
 }
 
 interface Slots {
-    mdEditor: HTMLElement;
-    mdPreview: HTMLElement;
-    wwEditor: HTMLElement;
+  mdEditor: HTMLElement;
+  mdPreview: HTMLElement;
+  wwEditor: HTMLElement;
 }
 
 export class EditorCore {
-    public eventEmitter: Emitter;
+  public eventEmitter: Emitter;
 
-    constructor(options: EditorOptions);
+  constructor(options: EditorOptions);
 
-    public static factory(options: EditorOptions): EditorCore | Viewer;
+  public static factory(options: EditorOptions): EditorCore | Viewer;
 
-    public static setLanguage(code: string, data: Record<string, string>): void;
+  public static setLanguage(code: string, data: Record<string, string>): void;
 
-    changePreviewStyle(style: PreviewStyle): void;
+  changePreviewStyle(style: PreviewStyle): void;
 
-    exec(name: string, payload?: Record<string, any>): void;
+  exec(name: string, payload?: Record<string, any>): void;
 
-    addCommand(type: EditorType, name: string, command: CommandFn): void;
+  addCommand(type: EditorType, name: string, command: CommandFn): void;
 
-    on(type: string, handler: Handler): void;
+  on(type: string, handler: Handler): void;
 
-    off(type: string): void;
+  off(type: string): void;
 
-    addHook(type: string, handler: Handler): void;
+  addHook(type: string, handler: Handler): void;
 
-    removeHook(type: string): void;
+  removeHook(type: string): void;
 
-    focus(): void;
+  focus(): void;
 
-    blur(): void;
+  blur(): void;
 
-    moveCursorToEnd(focus?: boolean): void;
+  moveCursorToEnd(focus?: boolean): void;
 
-    moveCursorToStart(focus?: boolean): void;
+  moveCursorToStart(focus?: boolean): void;
 
-    setMarkdown(markdown: string, cursorToEnd?: boolean): void;
+  setMarkdown(markdown: string, cursorToEnd?: boolean): void;
 
-    setHTML(html: string, cursorToEnd?: boolean): void;
+  setHTML(html: string, cursorToEnd?: boolean): void;
 
-    getMarkdown(): string;
+  getMarkdown(): string;
 
-    getHTML(): string;
+  getHTML(): string;
 
-    insertText(text: string): void;
+  insertText(text: string): void;
 
-    setSelection(start: EditorPos, end?: EditorPos): void;
+  setSelection(start: EditorPos, end?: EditorPos): void;
 
-    replaceSelection(text: string, start?: EditorPos, end?: EditorPos): void;
+  replaceSelection(text: string, start?: EditorPos, end?: EditorPos): void;
 
-    deleteSelection(start?: EditorPos, end?: EditorPos): void;
+  deleteSelection(start?: EditorPos, end?: EditorPos): void;
 
-    getSelectedText(start?: EditorPos, end?: EditorPos): string;
+  getSelectedText(start?: EditorPos, end?: EditorPos): string;
 
-    getRangeInfoOfNode(pos?: EditorPos): NodeRangeInfo;
+  getRangeInfoOfNode(pos?: EditorPos): NodeRangeInfo;
 
-    addWidget(node: Node, style: WidgetStyle, pos?: EditorPos): void;
+  addWidget(node: Node, style: WidgetStyle, pos?: EditorPos): void;
 
-    replaceWithWidget(start: EditorPos, end: EditorPos, text: string): void;
+  replaceWithWidget(start: EditorPos, end: EditorPos, text: string): void;
 
-    setHeight(height: string): void;
+  setHeight(height: string): void;
 
-    getHeight(): string;
+  getHeight(): string;
 
-    setMinHeight(minHeight: string): void;
+  setMinHeight(minHeight: string): void;
 
-    getMinHeight(): string;
+  getMinHeight(): string;
 
-    isMarkdownMode(): boolean;
+  isMarkdownMode(): boolean;
 
-    isWysiwygMode(): boolean;
+  isWysiwygMode(): boolean;
 
-    isViewer(): boolean;
+  isViewer(): boolean;
 
-    getCurrentPreviewStyle(): PreviewStyle;
+  getCurrentPreviewStyle(): PreviewStyle;
 
-    changeMode(mode: EditorType, isWithoutFocus?: boolean): void;
+  changeMode(mode: EditorType, isWithoutFocus?: boolean): void;
 
-    destroy(): void;
+  destroy(): void;
 
-    hide(): void;
+  hide(): void;
 
-    show(): void;
+  show(): void;
 
-    setScrollTop(value: number): void;
+  setScrollTop(value: number): void;
 
-    getScrollTop(): number;
+  getScrollTop(): number;
 
-    reset(): void;
+  reset(): void;
 
-    getSelection(): SelectionPos;
+  getSelection(): SelectionPos;
 
-    setPlaceholder(placeholder: string): void;
+  setPlaceholder(placeholder: string): void;
 
-    getEditorElements(): Slots;
+  getEditorElements(): Slots;
 }
 
 export class Editor extends EditorCore {
-    insertToolbarItem({ groupIndex, itemIndex }: IndexList, item: string | ToolbarItemOptions): void;
+  insertToolbarItem({ groupIndex, itemIndex }: IndexList, item: string | ToolbarItemOptions): void;
 
-    removeToolbarItem(itemName: string): void;
+  removeToolbarItem(itemName: string): void;
 }
 
 export type SelectionPos = Sourcepos;
 export type EditorPos = MdPos | number;
 
 export interface NodeRangeInfo {
-    range: SelectionPos;
-    type: string;
+  range: SelectionPos;
+  type: string;
 }
 
 export interface Base {
-    el: HTMLElement;
+  el: HTMLElement;
 
-    editorType: EditorType;
+  editorType: EditorType;
 
-    eventEmitter: Emitter;
+  eventEmitter: Emitter;
 
-    context: Context;
+  context: Context;
 
-    schema: Schema;
+  schema: Schema;
 
-    keymaps: Plugin[];
+  keymaps: Plugin[];
 
-    view: EditorView;
+  view: EditorView;
 
-    commands: EditorAllCommandMap;
+  commands: EditorAllCommandMap;
 
-    specs: SpecManager;
+  specs: SpecManager;
 
-    placeholder: { text: string };
+  placeholder: { text: string };
 
-    createSpecs(): SpecManager;
+  createSpecs(): SpecManager;
 
-    createContext(): Context;
+  createContext(): Context;
 
-    createState(): EditorState;
+  createState(): EditorState;
 
-    createView(): EditorView;
+  createView(): EditorView;
 
-    createSchema(): Schema;
+  createSchema(): Schema;
 
-    createKeymaps(useCommandShortcut: boolean): Plugin<any, any>[];
+  createKeymaps(useCommandShortcut: boolean): Plugin<any, any>[];
 
-    createCommands(): Record<string, EditorCommandFn<Record<string, any>>>;
+  createCommands(): Record<string, EditorCommandFn<Record<string, any>>>;
 
-    focus(): void;
+  focus(): void;
 
-    blur(): void;
+  blur(): void;
 
-    destroy(): void;
+  destroy(): void;
 
-    moveCursorToStart(focus: boolean): void;
+  moveCursorToStart(focus: boolean): void;
 
-    moveCursorToEnd(focus: boolean): void;
+  moveCursorToEnd(focus: boolean): void;
 
-    setScrollTop(top: number): void;
+  setScrollTop(top: number): void;
 
-    getScrollTop(): number;
+  getScrollTop(): number;
 
-    setPlaceholder(text: string): void;
+  setPlaceholder(text: string): void;
 
-    setHeight(height: number): void;
+  setHeight(height: number): void;
 
-    setMinHeight(minHeight: number): void;
+  setMinHeight(minHeight: number): void;
 
-    getElement(): HTMLElement;
+  getElement(): HTMLElement;
 
-    setSelection(start: EditorPos, end?: EditorPos): void;
+  setSelection(start: EditorPos, end?: EditorPos): void;
 
-    replaceWithWidget(start: EditorPos, end: EditorPos, text: string): void;
+  replaceWithWidget(start: EditorPos, end: EditorPos, text: string): void;
 
-    addWidget(node: Node, style: WidgetStyle, pos?: EditorPos): void;
+  addWidget(node: Node, style: WidgetStyle, pos?: EditorPos): void;
 
-    replaceSelection(text: string, start?: EditorPos, end?: EditorPos): void;
+  replaceSelection(text: string, start?: EditorPos, end?: EditorPos): void;
 
-    deleteSelection(start?: EditorPos, end?: EditorPos): void;
+  deleteSelection(start?: EditorPos, end?: EditorPos): void;
 
-    getSelectedText(start?: EditorPos, end?: EditorPos): string;
+  getSelectedText(start?: EditorPos, end?: EditorPos): string;
 
-    getSelection(): SelectionPos;
+  getSelection(): SelectionPos;
 
-    getRangeInfoOfNode(pos?: EditorPos): NodeRangeInfo;
+  getRangeInfoOfNode(pos?: EditorPos): NodeRangeInfo;
 }
 
 export type SchemaMap = Record<string, NodeSpec | MarkSpec>;
 
 export interface HTMLSchemaMap {
-    nodes: SchemaMap;
-    marks: SchemaMap;
+  nodes: SchemaMap;
+  marks: SchemaMap;
 }

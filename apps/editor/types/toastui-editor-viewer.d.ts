@@ -1,39 +1,36 @@
-declare module '@toast-ui/editor/dist/toastui-editor-viewer' {
-  import {
-    Viewer,
-    ViewerOptions,
-    ExtendedAutolinks,
-    LinkAttributes,
-    Sanitizer,
-    EventMap,
-    WidgetRuleMap,
-    WidgetRule,
-    PluginContext,
-    I18n,
-    CustomHTMLRenderer,
-    HTMLMdNodeConvertor,
-    HTMLMdNodeConvertorMap,
-    PluginInfo,
-    PluginNodeViews,
-    PluginCommandMap,
-  } from '@toast-ui/editor';
+import {
+  Viewer,
+  ViewerOptions,
+  ExtendedAutolinks,
+  LinkAttributes,
+  Sanitizer,
+  EventMap,
+  WidgetRuleMap,
+  WidgetRule,
+  PluginContext,
+  I18n,
+  CustomHTMLRenderer,
+  HTMLMdNodeConvertor,
+  HTMLMdNodeConvertorMap,
+} from './editor';
 
-  export {
-    ViewerOptions,
-    ExtendedAutolinks,
-    LinkAttributes,
-    Sanitizer,
-    EventMap,
-    WidgetRuleMap,
-    WidgetRule,
-    PluginContext,
-    I18n,
-    CustomHTMLRenderer,
-    HTMLMdNodeConvertor,
-    HTMLMdNodeConvertorMap,
-    PluginInfo,
-    PluginNodeViews,
-    PluginCommandMap,
-  };
-  export default Viewer;
-}
+import { PluginInfo, PluginNodeViews, PluginCommandMap } from './plugin';
+
+export {
+  ViewerOptions,
+  ExtendedAutolinks,
+  LinkAttributes,
+  Sanitizer,
+  EventMap,
+  WidgetRuleMap,
+  WidgetRule,
+  PluginContext,
+  I18n,
+  CustomHTMLRenderer,
+  HTMLMdNodeConvertor,
+  HTMLMdNodeConvertorMap,
+};
+
+export { PluginInfo, PluginNodeViews, PluginCommandMap };
+
+export default Viewer;
